@@ -23,9 +23,9 @@ def print_header
   puts '-------------'
 end
 
-def print(names_with_D)
-  names_with_D.each do |name|
-    if name[:name].start_with?("D")
+def print(names_shorter_than_12)
+  names_shorter_than_12.each do |name|
+    if name[:name].length < 12
     puts "#{name[:name]} (#{name[:cohort]} cohort)"
   end
   end
