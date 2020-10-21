@@ -22,16 +22,13 @@ def print_header
   puts 'The students of Villains Academy'
   puts '-------------'
 end
-
-def print(names_shorter_than_12)
-  names_shorter_than_12.each do |name|
-    if name[:name].length < 12
-    puts "#{name[:name]} (#{name[:cohort]} cohort)"
-  end
+def print(students)
+  counter = 0
+  while counter < students.length do
+    puts "#{students[counter][:name]} (#{students[counter][:cohort]} cohort)"
+    counter += 1
   end
 end
-
-
 def print_footer(students)
 # finally, we print the total number of students
   puts "Overall we have #{students.count} great students"
