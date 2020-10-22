@@ -9,26 +9,12 @@ def interactive_menu
   end #<-loop do
 end #<-interactive_menu
 
-def save_students
-# open the file for writing
-  file = File.open("students.csv", "w")
-# iterate over the array of students
-  @students.each do |student|
-# put all elements of the hash into an array and then
-# convert it all to the string
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-# we write this line to the file using the method puts()
-    file.puts csv_line
-  end #<- each do
-# Every time you open file, it needs to be closed.
-  file.close
-end #<- save_students
 
 def print_menu
     puts "1. Input the students"
     puts "2. Show the students"
     puts "3. Save the list to students.csv"
+    puts "4. Load the list from students.csv"
     puts "9. Exit"
 end #<-print menu
 
@@ -41,18 +27,14 @@ def process(selection)
         show_students
       when "3"
         save_students
+      when "4"
+        load_students
       when "9"
         exit
       else
         puts "I don't know what you mean. Try again."
       end #<- case selection
   end #<- interactive_menu
-
-  def show_students
-    print_header
-    print_student_list
-    print_footer
-  end
 
 # let's put all students into an array
 def input_students
@@ -72,6 +54,12 @@ def input_students
 # students
 end
 
+def show_students
+  print_header
+  print_student_list
+  print_footer
+end
+
 def print_header
   puts 'The students of Villains Academy'
   puts '-------------'
@@ -85,6 +73,39 @@ def print_footer
 # finally, we print the total number of students
   puts "Overall we have #{@students.count} great students"
 end
+
+def save_students
+# open the file for writing
+  file = File.open("students.csv", "w")
+# iterate over the array of students
+  @students.each do |student|
+# put all elements of the hash into an array and then
+# convert it all to the string
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+# we write this line to the file using the method puts()
+    file.puts csv_line
+  end #<- each do
+# Every time you open file, it needs to be closed.
+  file.close
+end #<- save_students
+
+def load_students
+# we open the file (this time for reading)
+  file = File.open("students.csv", "r")
+# then we read all lines into an array and iterate over it.
+  file.readlines.each do |line|
+# On every iteration we discard the training new line character from the line,
+# split it at the comma (this will give us an array with two elements)
+# and assign it to the name and cohort variables.
+  name, cohort = line.chomp.split(',')
+# we have the name and the cohort, we create a new hash and put it into the list of students.
+    @students << {name: name, cohort: cohort.to_sym}
+  end #<- readlines.each.do
+# Finally, we close the file.
+file.close
+end #<- load_students
+
 #call the interactive_menu
 interactive_menu
 # call the methods
