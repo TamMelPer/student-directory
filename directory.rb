@@ -5,7 +5,7 @@ def interactive_menu
   loop do
 # 1. Print the menu and ask the user what they want to do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end #<-loop do
 end #<-interactive_menu
 
@@ -41,14 +41,14 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
 # get the first name
-  name = gets.chomp
+  name = STDIN.gets.chomp
 # while the name is not empty, repeat this code
   while !name.empty? do
 # add the student hash to the array
   @students << {name: name, cohort: :november}
   puts "Now we have #{@students.count} students"
 # get another name from the user
-  name = gets.chomp
+  name = STDIN.gets.chomp
   end
 # doesnt need to return the array of students because of the instance variable
 # students
@@ -89,10 +89,12 @@ def save_students
 # Every time you open file, it needs to be closed.
   file.close
 end #<- save_students
-
-def load_students
-# we open the file (this time for reading)
-  file = File.open("students.csv", "r")
+# Make this method more flexible by passing the name as the argument. However,
+# to preserve the original functionality, let's give it a default value.
+def load_students(filename = "students.csv")
+# if the argument is not supplied, then the value "students.csv" will be used
+# (this time for reading)
+  file = File.open(filename, "r")
 # then we read all lines into an array and iterate over it.
   file.readlines.each do |line|
 # On every iteration we discard the training new line character from the line,
@@ -106,7 +108,27 @@ def load_students
 file.close
 end #<- load_students
 
-#call the interactive_menu
+def try_load_students
+# First, we'll need to see if the argument is given.
+  filename = ARGV.first
+# If not, we just proceed as before and don't do anything.
+  return if filename.nil?
+# Then we need to check if the file exists.
+  if File.exists?(filename)
+# If the file is given and it exists, let's load it.
+    load_students(filename)
+      puts "Loaded #{@students.count} from #{filename}"
+# If it doesn't, the user must have given us the incorrect file name, so
+# let's show an error message and quit.
+  else
+    puts "Sorry, #{filename} doesn't exist"
+    exit
+  end #<- if/else
+end #<- try_load_students
+
+
+#call the try_load menu before the interactive_menu
+try_load_students
 interactive_menu
 # call the methods
 #students = input_students
