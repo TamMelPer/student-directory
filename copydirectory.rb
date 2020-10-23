@@ -1,3 +1,4 @@
+# ------------------- first menthod -----------------------
 # let's put all students into an array
 def input_students
   puts 'Please enter the name of the student. Hit enter if no students'
@@ -56,22 +57,36 @@ def input_students
 # return the array of students
   students
 end # <- this is the end for the method
-
+# -----------------------------------------------------
 def print_header
   puts 'The students of Villains Academy'
   puts '-------------'
 end
 
 def print(students)
-  students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
-  end
+  months = students.map {|student| student[:cohort]}.uniq
+    months.each do |cohort|
+      students.each do |student|
+# if the value int he cohort key matches the cohort in the block
+        if student[:cohort] == cohort
+# then put month + names assosiated with that month
+        puts "#{cohort} students are #{student[:name]}"
+      end #<-if condition
+    end #<- student
+  end #<-months
 end
+
+#def print(students)
+#  students.each do |student|
+#    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+#  end
+#end
 
 def print_footer(students)
   # finally, we print the total number of students
   puts "Overall we have #{students.count} great students"
 end
+# -----------------------------------------------------
 # call the methods
 students = input_students
 print_header
